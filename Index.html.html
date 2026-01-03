@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore the Marvel Cinematic Universe - All movies, characters, and news in one place">
+    <meta name="keywords" content="Marvel, MCU, Iron Man, Avengers, Captain America, Spider-Man, Thor, Black Panther">
+    <title>Marvel Universe | Home of MCU Movies</title>
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Preload critical CSS -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" as="style">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Critical CSS (inlined for performance) -->
+    <style>
+        :root {
+            --marvel-red: #ed1d24;
+            --marvel-dark: #151515;
+            --marvel-light: #f0f0f0;
+            --marvel-gold: #f5b50a;
+            --marvel-blue: #0066cc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--marvel-light);
+            background-color: var(--marvel-dark);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--marvel-light);
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        .header {
+            background-color: rgba(21, 21, 21, 0.95);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .header.scrolled {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            padding: 10px 0;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--marvel-red);
+            margin-left: 10px;
+        }
+        
+        .nav {
+            display: flex;
+        }
+        
+        .nav-list {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin-left: 30px;
+        }
+        
+        .nav-link {
+            font-weight: 600;
+            font-size: 16px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: var(--marvel-red);
+        }
+        
+        .nav-link.active {
+            color: var(--marvel-red);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--marvel-red);
+        }
+        
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--marvel-light);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            min-height: 600px;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23151515"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%23ed1d24" stroke-width="1"/></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            text-align: center;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            color: var(--marvel-light);
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8);
+        }
+        
+        .hero-title span {
+            color: var(--marvel-red);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: var(--marvel-gold);
+            font-weight: 400;
+        }
+        
+        .hero-button {
+            display: inline-block;
+            background-color: var(--marvel-red);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 18px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .hero-button:hover {
+            background-color: #c0171d;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Featured Movies Section */
+        .section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--marvel-red);
+        }
+        
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .movie-card {
+            background-color: rgba(30, 30, 30, 0.8);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .movie-poster {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .movie-info {
+            padding: 20px;
+        }
+        
+        .movie-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--marvel-light);
+        }
+        
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .movie-rating {
+            color: var(--marvel-gold);
+        }
+        
+        /* Character Showcase */
+        .characters-slider {
+            position: relative;
+            overflow: hidden;
+            padding: 40px 0;
+        }
+        
+        .slider-container {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .character-slide {
+            min-width: 250px;
+            margin: 0 15px;
+            text-align: center;
+        }
+        
+        .character-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--marvel-red);
+            margin-bottom: 20px;
+        }
+        
+        .character-name {
+            font-size: 1.3rem;
+            color: var(--marvel-light);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #0a0a0a;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--marvel-red);
+            margin-bottom: 20px;
+        }
+        
+        .footer-description {
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+        
+        .footer-heading {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: var(--marvel-light);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-link {
+            margin-bottom: 10px;
+        }
+        
+        .footer-link a {
+            color: #aaa;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link a:hover {
+            color: var(--marvel-red);
+        }
+        
+        .copyright {
+            text-align: center;
+            color: #666;
+            padding-top: 30px;
+            border-top: 1px solid #333;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .nav {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: rgba(21, 21, 21, 0.98);
+                padding: 20px;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+            
+            .nav.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .nav-list {
+                flex-direction: column;
+            }
+            
+            .nav-item {
+                margin: 15px 0;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section {
+                padding: 70px 0;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-button {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+            
+            .movies-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Loading optimization */
+        .loading-placeholder {
+            background: linear-gradient(90deg, #222 25%, #333 50%, #222 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            min-height: 300px;
+            border-radius: 8px;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Lazy loading for images */
+        .lazy-img {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .lazy-img.loaded {
+            opacity: 1;
+        }
+    </style>
+    
+    <!-- Deferred non-critical CSS -->
+    <link rel="stylesheet" href="styles/deferred.css" media="print" onload="this.media='all'">
+    
+    <!-- Preload important images -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <div class="logo-text">MARVEL</div>
+                </a>
+                
+                <button class="mobile-toggle" id="mobileToggle">
+                    ☰
+                </button>
+                
+                <nav class="nav" id="mainNav">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="index.html" class="nav-link active">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="movies.html" class="nav-link">Movies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="characters.html" class="nav-link">Characters</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="timeline.html" class="nav-link">Timeline</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="about.html" class="nav-link">About</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">MARVEL <span>UNIVERSE</span></h1>
+            <p class="hero-subtitle">Explore the complete Marvel Cinematic Universe - From Iron Man to The Avengers and beyond</p>
+            <a href="#featured" class="hero-button">Explore Movies</a>
+        </div>
+    </section>
+
+    <!-- Featured Movies Section -->
+    <section class="section" id="featured">
+        <div class="container">
+            <h2 class="section-title">Featured MCU Movies</h2>
+            
+            <div class="movies-grid" id="moviesGrid">
+                <!-- Movies will be loaded dynamically with JavaScript -->
+                <div class="loading-placeholder"></div>
+                <div class="loading-placeholder"></div>
+                <div class="loading-placeholder"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Characters Section -->
+    <section class="section" id="characters">
+        <div class="container">
+            <h2 class="section-title">Iconic Characters</h2>
+        <div><p>Subtitle: Journey through the epic saga of heroes, from Iron Man's first flight to the multiversal madness of Phase 5. Explore all 30+ films, beloved characters, and interconnected storylines that changed cinema forever.
+
+Call to Action Button: EXPLORE THE MCU
+
+</p></div>
+
+            
+            <div class="characters-slider">
+                <div class="slider-container" id="sliderContainer">
+                    <!-- Characters will be loaded dynamically with JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="footer-logo">MARVEL</div>
+                    <p class="footer-description">
+                        The ultimate guide to the Marvel Cinematic Universe. 
+                        Explore all movies, characters, storylines, and more.
+                    </p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="index.html">Home</a></li>
+                        <li class="footer-link"><a href="movies.html">All Movies</a></li>
+                        <li class="footer-link"><a href="characters.html">Characters</a></li>
+                        <li class="footer-link"><a href="timeline.html">MCU Timeline</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Phase 4 & 5</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Doctor Strange 2</a></li>
+                        <li class="footer-link"><a href="#">Thor: Love and Thunder</a></li>
+                        <li class="footer-link"><a href="#">Black Panther: Wakanda Forever</a></li>
+                        <li class="footer-link"><a href="#">Ant-Man and The Wasp: Quantumania</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Connect With Us</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Facebook</a></li>
+                        <li class="footer-link"><a href="#">Twitter</a></li>
+                        <li class="footer-link"><a href="#">Instagram</a></li>
+                        <li class="footer-link"><a href="#">YouTube</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Marvel Universe. All Marvel character names and related content are trademarks of Marvel Entertainment. This is a fan site for educational purposes.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Optimized JavaScript with defer/async patterns
+        
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Header scroll effect
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // Mobile menu toggle
+            const mobileToggle = document.getElementById('mobileToggle');
+            const mainNav = document.getElementById('mainNav');
+            
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function() {
+                    mainNav.classList.toggle('active');
+                    this.textContent = mainNav.classList.contains('active') ? '✕' : '☰';
+                });
+            }
+            
+            // Close mobile menu when clicking a link
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (mainNav.classList.contains('active')) {
+                        mainNav.classList.remove('active');
+                        mobileToggle.textContent = '☰';
+                    }
+                });
+            });
+            
+            // Load movies dynamically
+            const moviesGrid = document.getElementById('moviesGrid');
+            if (moviesGrid) {
+                // Simulate API call with setTimeout (in real app, would be fetch)
+                setTimeout(() => {
+                    const movies = [
+                        {
+                            id: 1,
+                            title: "Iron Man",
+                            year: 2008,
+                            rating: "94%",
+                            img: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        },
+                        {
+                            id: 2,
+                            title: "The Avengers",
+                            year: 2012,
+                            rating: "92%",
+                            img: "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        },
+                        {
+                            id: 3,
+                            title: "Avengers: Endgame",
+                            year: 2019,
+                            rating: "94%",
+                            img: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        },
+                        {
+                            id: 4,
+                            title: "Black Panther",
+                            year: 2018,
+                            rating: "96%",
+                            img: "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        },
+                        {
+                            id: 5,
+                            title: "Spider-Man: No Way Home",
+                            year: 2021,
+                            rating: "93%",
+                            img: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        },
+                        {
+                            id: 6,
+                            title: "Guardians of the Galaxy",
+                            year: 2014,
+                            rating: "91%",
+                            img: "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        }
+                    ];
+                    
+                    moviesGrid.innerHTML = '';
+                    
+                    movies.forEach(movie => {
+                        const movieCard = document.createElement('div');
+                        movieCard.className = 'movie-card';
+                        movieCard.innerHTML = `
+                            <img src="${movie.img}" alt="${movie.title}" class="movie-poster lazy-img" loading="lazy">
+                            <div class="movie-info">
+                                <h3 class="movie-title">${movie.title}</h3>
+                                <div class="movie-meta">
+                                    <span class="movie-year">${movie.year}</span>
+                                    <span class="movie-rating">${movie.rating}</span>
+                                </div>
+                                <p class="movie-desc">The film that started the Marvel Cinematic Universe and introduced Tony Stark as Iron Man.</p>
+                            </div>
+                        `;
+                        moviesGrid.appendChild(movieCard);
+                        
+                        // Lazy load image
+                        const img = movieCard.querySelector('.lazy-img');
+                        img.addEventListener('load', function() {
+                            img.classList.add('loaded');
+                        });
+                        
+                        // Set a fallback in case image fails to load
+                        img.addEventListener('error', function() {
+                            img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600"><rect width="400" height="600" fill="%23222"/><text x="200" y="300" font-family="Arial" font-size="24" fill="%23fff" text-anchor="middle">${movie.title}</text></svg>';
+                            img.classList.add('loaded');
+                        });
+                        
+                        // Trigger load for cached images
+                        if (img.complete) {
+                            img.classList.add('loaded');
+                        }
+                    });
+                }, 800); // Simulate network delay
+            }
+            
+            // Load characters dynamically
+            const sliderContainer = document.getElementById('sliderContainer');
+            if (sliderContainer) {
+                const characters = [
+                    { name: "Iron Man", img: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" },
+                    { name: "Captain America", img: "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" },
+                    { name: "Thor", img: "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" },
+                    { name: "Black Widow", img: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" },
+                    { name: "Hulk", img: "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" },
+                    { name: "Spider-Man", img: "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" },
+                    { name: "Black Panther", img: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" },
+                    { name: "Doctor Strange", img: "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" }
+                ];
+                
+                characters.forEach(character => {
+                    const slide = document.createElement('div');
+                    slide.className = 'character-slide';
+                    slide.innerHTML = `
+                        <img src="${character.img}" alt="${character.name}" class="character-image lazy-img" loading="lazy">
+                        <h3 class="character-name">${character.name}</h3>
+                    `;
+                    sliderContainer.appendChild(slide);
+                    
+                    // Lazy load image
+                    const img = slide.querySelector('.lazy-img');
+                    img.addEventListener('load', function() {
+                        img.classList.add('loaded');
+                    });
+                    
+                    // Set a fallback in case image fails to load
+                    img.addEventListener('error', function() {
+                        img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><circle cx="200" cy="200" r="200" fill="%23ed1d24"/><text x="200" y="200" font-family="Arial" font-size="24" fill="%23fff" text-anchor="middle" dy=".3em">${character.name}</text></svg>';
+                        img.classList.add('loaded');
+                    });
+                    
+                    // Trigger load for cached images
+                    if (img.complete) {
+                        img.classList.add('loaded');
+                    }
+                });
+                
+                // Simple slider functionality
+                let currentPosition = 0;
+                const slideWidth = 280;
+                
+                function slideNext() {
+                    const maxPosition = -(characters.length * slideWidth - window.innerWidth);
+                    
+                    if (currentPosition > maxPosition) {
+                        currentPosition -= slideWidth;
+                        sliderContainer.style.transform = `translateX(${currentPosition}px)`;
+                    }
+                }
+                
+                function slidePrev() {
+                    if (currentPosition < 0) {
+                        currentPosition += slideWidth;
+                        sliderContainer.style.transform = `translateX(${currentPosition}px)`;
+                    }
+                }
+                
+                // Add navigation buttons if needed
+                const nextBtn = document.createElement('button');
+                nextBtn.textContent = '→';
+                nextBtn.style.cssText = 'position:absolute; right:10px; top:50%; transform:translateY(-50%); background:var(--marvel-red); color:white; border:none; width:40px; height:40px; border-radius:50%; font-size:20px; cursor:pointer; z-index:10;';
+                nextBtn.addEventListener('click', slideNext);
+                
+                const prevBtn = document.createElement('button');
+                prevBtn.textContent = '←';
+                prevBtn.style.cssText = 'position:absolute; left:10px; top:50%; transform:translateY(-50%); background:var(--marvel-red); color:white; border:none; width:40px; height:40px; border-radius:50%; font-size:20px; cursor:pointer; z-index:10;';
+                prevBtn.addEventListener('click', slidePrev);
+                
+                document.querySelector('.characters-slider').appendChild(nextBtn);
+                document.querySelector('.characters-slider').appendChild(prevBtn);
+            }
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+        
+        // Performance optimization: Defer non-critical resources
+        window.addEventListener('load', function() {
+            // Load any deferred resources
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(() => {
+                    // Load non-critical resources here
+                });
+            }
+        });
+    </script>
+</body>
+</html>
